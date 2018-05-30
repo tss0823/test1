@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhushou.test1.dal.mapper.UserMapper">
+
+	<resultMap type="User" id="BaseResultMap">
+		<id column="id" property="id"/>
+		<result column="accountNo" property="accountNo"/>
+		<result column="pwd" property="pwd"/>
+		<result column="nickname" property="nickname"/>
+		<result column="type" property="type"/>
+		<result column="status" property="status"/>
+		<result column="mobile" property="mobile"/>
+		<result column="email" property="email"/>
+		<result column="sex" property="sex"/>
+		<result column="birthday" property="birthday"/>
+		<result column="message" property="message"/>
+		<result column="avatar" property="avatar"/>
+		<result column="desc" property="desc"/>
+		<result column="payPwd" property="payPwd"/>
+		<result column="address" property="address"/>
+		<result column="userName" property="userName"/>
+		<result column="role" property="role"/>
+		<result column="career" property="career"/>
+		<result column="education" property="education"/>
+		<result column="clientId" property="clientId"/>
+		<result column="deviceId" property="deviceId"/>
+		<result column="deviceToken" property="deviceToken"/>
+		<result column="inviteCode" property="inviteCode"/>
+		<result column="shareInviteCode" property="shareInviteCode"/>
+		<result column="gmtCreate" property="gmtCreate"/>
+		<result column="gmtModify" property="gmtModify"/>
+		<result column="delState" property="delState"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+	 `accountNo`, `pwd`, `nickname`, `type`, `status`, `mobile`, `email`, `sex`,
+	 `birthday`, `message`, `avatar`, `desc`, `payPwd`, `address`, `userName`, `role`,
+	 `career`, `education`, `clientId`, `deviceId`, `deviceToken`, `inviteCode`, `shareInviteCode`, `id`,
+	 `gmtCreate`, `gmtModify`, `delState`
+	</sql>
+
+	<sql id="Base_Table_Name">
+		user
+	</sql>
+
+	<sql id="Base_Where">
+		delState = 1
+		<if test="accountNo != null  and accountNo != ''"> and  `accountNo` = #{accountNo} </if>
+		<if test="pwd != null  and pwd != ''"> and  `pwd` = #{pwd} </if>
+		<if test="nickname != null  and nickname != ''"> and  `nickname` = #{nickname} </if>
+		<if test="type != null "> and  `type` = #{type} </if>
+		<if test="status != null "> and  `status` = #{status} </if>
+		<if test="mobile != null  and mobile != ''"> and  `mobile` = #{mobile} </if>
+		<if test="email != null  and email != ''"> and  `email` = #{email} </if>
+		<if test="sex != null "> and  `sex` = #{sex} </if>
+		<if test="birthday != null  and birthday != ''"> and  `birthday` = #{birthday} </if>
+		<if test="message != null  and message != ''"> and  `message` = #{message} </if>
+		<if test="avatar != null  and avatar != ''"> and  `avatar` = #{avatar} </if>
+		<if test="desc != null  and desc != ''"> and  `desc` = #{desc} </if>
+		<if test="payPwd != null  and payPwd != ''"> and  `payPwd` = #{payPwd} </if>
+		<if test="address != null  and address != ''"> and  `address` = #{address} </if>
+		<if test="userName != null  and userName != ''"> and  `userName` = #{userName} </if>
+		<if test="role != null  and role != ''"> and  `role` = #{role} </if>
+		<if test="career != null  and career != ''"> and  `career` = #{career} </if>
+		<if test="education != null "> and  `education` = #{education} </if>
+		<if test="clientId != null  and clientId != ''"> and  `clientId` = #{clientId} </if>
+		<if test="deviceId != null  and deviceId != ''"> and  `deviceId` = #{deviceId} </if>
+		<if test="deviceToken != null  and deviceToken != ''"> and  `deviceToken` = #{deviceToken} </if>
+		<if test="inviteCode != null  and inviteCode != ''"> and  `inviteCode` = #{inviteCode} </if>
+		<if test="shareInviteCode != null  and shareInviteCode != ''"> and  `shareInviteCode` = #{shareInviteCode} </if>
+		<if test="id != null "> and  `id` = #{id} </if>
+		<if test="gmtCreate != null "> and  `gmtCreate` = #{gmtCreate} </if>
+		<if test="gmtModify != null "> and  `gmtModify` = #{gmtModify} </if>
+	</sql>
+
+    <select id="findById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from <include refid="Base_Table_Name"/> WHERE id = #{id}
+    </select>
+
+    <select id="selectList" parameterType="Map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> from <include refid="Base_Table_Name"/>
+        <where>
+            <include refid="Base_Where"/>
+        </where>
+        order by id desc
+        <if test="pagination != null ">
+            limit #{pagination.startRow}, #{pagination.pageSize}
+        </if>
+    </select>
+
+    <select id="selectListCount" parameterType="Map" resultType="java.lang.Long">
+        SELECT count(*) from <include refid="Base_Table_Name"/>
+        <where>
+            <include refid="Base_Where"/>
+        </where>
+    </select>
+
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="User">
+        <selectKey keyProperty="id" resultType="Long">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+        insert into
+        <include refid="Base_Table_Name"/>
+        (
+		`accountNo`,`pwd`,`nickname`,`type`,`status`,
+		`mobile`,`email`,`sex`,`birthday`,`message`,`avatar`,`desc`,`payPwd`,
+		`address`,`userName`,`role`,`career`,`education`,`clientId`,`deviceId`,`deviceToken`,
+		`inviteCode`,`shareInviteCode`,`gmtCreate`,`gmtModify`,`delState`
+		)
+		values
+		(
+		 #{accountNo}, #{pwd}, #{nickname}, #{type}, #{status}, #{mobile}, #{email}, #{sex}, 
+		 #{birthday}, #{message}, #{avatar}, #{desc}, #{payPwd}, #{address}, #{userName}, #{role}, 
+		 #{career}, #{education}, #{clientId}, #{deviceId}, #{deviceToken}, #{inviteCode}, #{shareInviteCode}, now(6), 
+		 now(6), 1
+		)
+    </insert>
+
+    <update id="updateById" parameterType="User">
+        update <include refid="Base_Table_Name"/>
+        <set>
+			<if test="accountNo != null and accountNo != ''">`accountNo` = #{accountNo}, </if>
+			<if test="pwd != null and pwd != ''">`pwd` = #{pwd}, </if>
+			<if test="nickname != null and nickname != ''">`nickname` = #{nickname}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="mobile != null and mobile != ''">`mobile` = #{mobile}, </if>
+			<if test="email != null and email != ''">`email` = #{email}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="birthday != null and birthday != ''">`birthday` = #{birthday}, </if>
+			<if test="message != null and message != ''">`message` = #{message}, </if>
+			<if test="avatar != null and avatar != ''">`avatar` = #{avatar}, </if>
+			<if test="desc != null and desc != ''">`desc` = #{desc}, </if>
+			<if test="payPwd != null and payPwd != ''">`payPwd` = #{payPwd}, </if>
+			<if test="address != null and address != ''">`address` = #{address}, </if>
+			<if test="userName != null and userName != ''">`userName` = #{userName}, </if>
+			<if test="role != null and role != ''">`role` = #{role}, </if>
+			<if test="career != null and career != ''">`career` = #{career}, </if>
+			<if test="education != null">`education` = #{education}, </if>
+			<if test="clientId != null and clientId != ''">`clientId` = #{clientId}, </if>
+			<if test="deviceId != null and deviceId != ''">`deviceId` = #{deviceId}, </if>
+			<if test="deviceToken != null and deviceToken != ''">`deviceToken` = #{deviceToken}, </if>
+			<if test="inviteCode != null and inviteCode != ''">`inviteCode` = #{inviteCode}, </if>
+			<if test="shareInviteCode != null and shareInviteCode != ''">`shareInviteCode` = #{shareInviteCode}, </if>
+			<if test="delState != null">`delState` = #{delState}, </if>
+        </set>
+        ,gmtModify = now(6)
+        where id = #{id}
+    </update>
+
+    <update id="deleteById" parameterType="Long">
+        update <include refid="Base_Table_Name"/> set delState = 0 where id = #{id}
+    </update>
+
+
+	<!-- user definition code start -->
+	<!-- user definition code end -->
+</mapper>
